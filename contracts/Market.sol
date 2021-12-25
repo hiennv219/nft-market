@@ -37,10 +37,7 @@ contract Market {
         uint256 price
     );
 
-    event Cancel(
-        uint listingId,
-        address seller
-    );
+    event Cancel(uint256 listingId, address seller);
 
     function listingToken(
         address token,
@@ -97,15 +94,22 @@ contract Market {
         );
     }
 
-    function cancel(uint listingId) public {
+    function cancel(uint256 listingId) public {
         Listing storage listing = _listings[listingId];
 
         require(msg.sender == listing.seller, "Only seller can cancel listing");
-        require(listing.status == ListingStatus.Active, "Listing is not active");
+        require(
+            listing.status == ListingStatus.Active,
+            "Listing is not active"
+        );
 
         listing.status = ListingStatus.Cancelled;
 
-        IERC721(listing.token).transferFrom(address(this), msg.sender, listing.tokenId);
+        IERC721(listing.token).transferFrom(
+            address(this),
+            msg.sender,
+            listing.tokenId
+        );
         emit Cancel(listingId, listing.seller);
     }
 }

@@ -6,5 +6,5 @@ interface IERC721 {
         address from,
         address to,
         uint256 tokenId
-        ) external;
+    ) external;
 }
